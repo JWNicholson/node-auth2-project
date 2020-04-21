@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
         jwt.verify(token, jwtSecret, (error, decodedToken) => {
           // if token is valid the error will be undefined
           if (error) {
-            res.status(401).json({ message: "You may not enter" });
+            res.status(401).json({ message: "You shall not pass" });
           } else {
               //token valid
             req.decodedToken = decodedToken;
