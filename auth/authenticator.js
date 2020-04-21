@@ -4,11 +4,11 @@ const { jwtSecret } = require('../config/secrets');
 
 module.exports = (req, res, next) => {
      // tokens are normally sent as the Authorization header
-   const token = req.headers.authorization;
+     const { authorization } = req.headers;
 
-   if (token) {
+   if (authorization) {
         // check if token is valid
-        jwt.verify(token, jwtSecret, (error, decodedToken) => {
+        jwt.verify(authorization, jwtSecret, (error, decodedToken) => {
           // if token is valid the error will be undefined
           if (error) {
             res.status(401).json({ message: "You shall not pass" });
@@ -20,6 +20,7 @@ module.exports = (req, res, next) => {
           }
         });
       } else {
-        res.status(400).json({ message: "Provide your credentials." });
+        res.status(401).json({ message: "No token found." });
       }
 };
+

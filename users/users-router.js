@@ -1,29 +1,17 @@
-const router = require('express').Router();
+const express = require('express');
 
-const Users = require('./users-model');
-const restricted = require('../auth/authenticator');
+const router = express.Router();
 
-//get users
-router.get('/', restricted, findDepartment('sales'), (req,res) => {
-    Users.find()
+const Users = require('./users-model.js');
+
+router.get('/', (req,res)=> {
+    Users.getUsers()
         .then(users => {
-            res.json(users);
-        })
-            .catch(err => res.send(err));
+            res.status(200).json(users)
+    })
+        .catch(err => {
+            res.status(500).json({message: "Can not retrieve that info right now."})
+        });
 });
-
-function findDepartment(department){
-    return function(req,res,next){
-        if(
-            req.user &&
-            req.user.department &&
-            req.user.department.toLowerCase() === department
-        ){
-            next();
-        }else{
-            res.status(403).json({ message: "Could not find that info."})
-        }
-    }
-}
 
 module.exports = router;
